@@ -1,0 +1,8 @@
+prefix=/home/robot/avl/avl-images/jackal_devel/devel
+
+Name: jackal_bringup
+Description: Description of jackal_bringup
+Version: 0.6.5
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

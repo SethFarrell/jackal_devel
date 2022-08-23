@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- frame_id originally vlp16_1 -->
+  <arg name="vlp16_frame_id" default="velodyne" />
+  <arg name="vlp16_device_ip" default="192.168.1.201" />
+  <arg name="vlp16_broadcast_ip" default="192.168.1.201" />
+  <arg name="vlp16_port" default="2368" />
+  <!-- Remaps /velodyne/velodyne points to /points_raw -->
+  <remap from="/velodyne/velodyne_points" to="/points_raw" /> 
+
+  <group ns="$(arg vlp16_frame_id)">
+
+    <arg name="vlp16_manager" default="$(arg vlp16_frame_id)_nodelet_manager" />
+    
+    <node pkg="nodelet" type="nodelet"
+      name="$(arg vlp16_manager)" args="manager" />
+    
+    <!-- load driver nodelet into it -->
+    <node pkg="nodelet" type="nodelet" name="$(arg vlp16_manager)_driver"
+      args="load velodyne_driver/DriverNodelet $(arg vlp16_manager)" >
+    <param name="device_ip" value="$(arg vlp16_device_ip)" />
+    <param name="frame_id" value="$(arg vlp16_frame_id)"/>
+    <param name="model" value="VLP16"/>
+    <param name="pcap" value=""/>
+    <param name="port" value="$(arg vlp16_port)" />
+    <param name="read_fast" value="false"/>
+    <param name="read_once" value="false"/>
+    <param name="repeat_delay" value="0.0"/>
+    <param name="rpm" value="600.0"/>
+    </node>
+    
+    <node pkg="nodelet" type="nodelet" name="$(arg vlp16_manager)_cloud"
+      args="load velodyne_pointcloud/CloudNodelet $(arg vlp16_manager)">
+    <param name="calibration"
+         value="$(find velodyne_pointcloud)/params/VLP16db.yaml"/>
+    <param name="max_range" value="130.0"/>
+    <param name="min_range" value="1.0"/>
+    </node>
+ 
+  </group>
+</launch>

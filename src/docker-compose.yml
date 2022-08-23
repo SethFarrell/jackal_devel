@@ -1,0 +1,24 @@
+version: '2'
+services:
+
+  base:
+    image: jackal:melodic
+    user: 1000:1000
+    group_add:
+      - "dialout"
+    container_name: jackal-devel
+    volumes:
+      - /home/robot:/home/robot:rw
+      - /dev:/dev:rw
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+      - ./launch-files:/launch-files:rw
+      - ./config:/config:rw
+    command: bash -c "source /opt/jackal_ws/devel/setup.bash && roslaunch /launch-files/jackal.launch"
+    network_mode: "host"
+    privileged: true
+    tty: true
+    restart: always
+
+

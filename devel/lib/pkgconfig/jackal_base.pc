@@ -1,0 +1,8 @@
+prefix=/home/robot/avl/avl-images/jackal_devel/devel
+
+Name: jackal_base
+Description: Description of jackal_base
+Version: 0.6.5
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
